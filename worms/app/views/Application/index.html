@@ -1,0 +1,15 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/modernizr-1.7.min.js'}"></script>
+<script src="@{'/public/javascripts/index.js'}"></script>
+<script src="http://j.maxmind.com/app/geoip.js"></script>
+#{/set}
+
+<p id="time"></p>
+<p id="lat"></p>
+<p id="lon"></p>
+<p id="alt"></p>
+
+<p id="attribution"></p>
+
