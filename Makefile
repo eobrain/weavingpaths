@@ -4,13 +4,16 @@ LINTED=\
  $(JS)/index.linted\
  \
 
-all: $(APP)/lib 
+all: jslint $(APP)/lib 
 
 jslint: $(LINTED)
 
 $(APP)/lib: jar-fetcher/project/build/WormsJarFetcher.scala jar-fetcher/lib_managed/scala_2.8.0/compile
 	cd jar-fetcher; ./sbt update
 	rsync -r jar-fetcher/lib_managed/scala_2.8.0/compile/ $@/
+
+jar-fetcher/lib_managed/scala_2.8.0/compile:
+	cd jar-fetcher; ./sbt update
 
 .SUFFIXES: .js .linted
 

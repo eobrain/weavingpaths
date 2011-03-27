@@ -1,3 +1,7 @@
 worms/tmp
 worms/test-result
+jar-fetcher/lib_managed
+jar-fetcher/project/boot
+jar-fetcher/project/build/target
+*.linted
 *.pyc

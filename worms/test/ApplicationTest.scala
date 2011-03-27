@@ -36,16 +36,23 @@ class ApplicationTest extends FunctionalTest {
   
   @Test 
   def canUpdateLocation {
+    val latOrig = Math.random -0.5
+    val lonOrig = Math.random - 0.5
+    val accOrig = Math.random * 100
+
     val response = POST(
       "/application/updateLocation",
-      Map("lat"->"0.659", "lon" -> "-2.137", "acc"->"20").asJava,
+      Map("lat" -> latOrig.toString,
+	  "lon" -> lonOrig.toString, 
+	  "acc" -> accOrig.toString
+	).asJava,
       Map[String,File]().asJava
     )
     assertIsOk(response)
     assertContentEquals("<p>OK</p>",response)
 
     val query = MongoDBObject("loc" ->  
-			      MongoDBObject("$nearSphere" -> List(0.659, -2.137))
+			      MongoDBObject("$nearSphere" -> List(latOrig, lonOrig))
 			    ) 
     Store.locations findOne query match {
       case Some(result) =>
@@ -53,9 +60,9 @@ class ApplicationTest extends FunctionalTest {
         var loc = result.as[BasicDBList]("loc")
         var lat:Double = loc(0).asInstanceOf[Double]
         var lon:Double = loc(1).asInstanceOf[Double]
-	assertEquals( 0.659, lat, epsilon)
-	assertEquals(-2.137, lon, epsilon)
-	assertEquals(20, result.as[Double]("acc"), epsilon)
+	assertEquals(latOrig, lat, epsilon)
+	assertEquals(lonOrig, lon, epsilon)
+	assertEquals(accOrig, result.as[Double]("acc"), epsilon)
         assertTrue(result.as[String]("sess").length > 10)
       case None =>
 	fail
