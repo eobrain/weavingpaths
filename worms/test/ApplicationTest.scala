@@ -5,7 +5,7 @@
  * which is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-import store.Store
+import service.store.Store
 import org.junit.{Before, Test, Assert}
 import play.Logger
 import play.test._

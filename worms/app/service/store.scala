@@ -5,7 +5,7 @@
  * which is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package store
+package service.store
 
 import play.Play.configuration
 import play.Logger

@@ -7,7 +7,7 @@
 
 package controllers
 
-import store.Store
+import service.store.Store
 import play._
 import play.mvc._
 import com.mongodb.casbah.Imports._
@@ -24,6 +24,7 @@ object Application extends Controller {
     //val loc = MongoDBObject("loc" -> MongoDBObject("lat" -> lat, "lon" -> lon),
     val loc = MongoDBObject("loc" -> List(lat,lon),
 			    "acc" -> acc,
+			    "time" -> System.currentTimeMillis,
 			    "sess" -> sessId
 			  )
     Store.locations += loc

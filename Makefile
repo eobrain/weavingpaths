@@ -4,7 +4,16 @@ LINTED=\
  $(JS)/index.linted\
  \
 
-all: jslint $(APP)/lib 
+run: jslint
+	./play-1.1.1/play $@ $(APP)
+
+test: jslint
+	./play-1.1.1/play $@ $(APP)
+
+update: jslint $(APP)/lib 
+
+clean:
+	./play-1.1.1/play $@ $(APP)
 
 jslint: $(LINTED)
 
