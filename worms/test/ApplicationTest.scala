@@ -6,10 +6,10 @@
  */
 
 import store.Store
-import org.junit._
+import org.junit.{Before, Test, Assert}
 import play.Logger
 import play.test._
-import play.mvc._
+//import play.mvc._
 import play.mvc.Http._
 import FunctionalTest._
 import scalaj.collection.Imports._
@@ -20,6 +20,11 @@ import Assert.{assertEquals, assertTrue, fail}
 
 
 class ApplicationTest extends FunctionalTest {
+
+  @Before
+  def removeAllOldStuffInDb {
+    Store.locations remove MongoDBObject()
+  }
 
   @Test
   def indexPageWorks {

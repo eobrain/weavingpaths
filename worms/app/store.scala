@@ -7,13 +7,17 @@
 
 package store
 
+import play.Play.configuration
+import play.Logger
 import com.mongodb.casbah.Imports._
 
 object Store{
 
   //TODO: configure to connect to any host
-  val connection = MongoConnection() //("localhost", 27017)
-  val db = connection("worms")
+  val dbhost = configuration getProperty "worms.dbhost"
+  val connection = MongoConnection(dbhost, 27017)
+  Logger.info("Connecting to mongoDB on %s",connection)
+  val db = connection(configuration getProperty "worms.dbhost")
   val locations = db("locations")
   locations ensureIndex MongoDBObject("loc" -> "2d")
 

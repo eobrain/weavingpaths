@@ -1,2 +1,3 @@
 worms/tmp
 worms/test-result
+*.pyc
