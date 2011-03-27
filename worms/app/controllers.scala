@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2011 Eamonn O'Brien-Strain, eob@well.com
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+
 package controllers
 
 import store.Store
@@ -14,7 +21,8 @@ object Application extends Controller {
     Logger.info("updateLocation(%s,%s,%s)", lat.asInstanceOf[AnyRef], lon.asInstanceOf[AnyRef], acc.asInstanceOf[AnyRef]);
     val sessId = session.getId
 
-    val loc = MongoDBObject("loc" -> MongoDBObject("lat" -> lat, "lon" -> lon),
+    //val loc = MongoDBObject("loc" -> MongoDBObject("lat" -> lat, "lon" -> lon),
+    val loc = MongoDBObject("loc" -> List(lat,lon),
 			    "acc" -> acc,
 			    "sess" -> sessId
 			  )
