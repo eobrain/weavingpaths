@@ -1,6 +1,7 @@
 APP=worms
 JS=$(APP)/public/javascripts
 LINTED=\
+ $(JS)/main.linted\
  $(JS)/index.linted\
  \
 

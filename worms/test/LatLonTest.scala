@@ -1,6 +1,5 @@
-import org.junit._
-import java.util._
-import play.test._
+import org.junit.{Test, Assert}
+import play.test.UnitTest
 import models.LatLon
 import LatLon.radians
 import Math.{ Pi, random }
@@ -8,6 +7,12 @@ import Assert.{ assertEquals, assertTrue }
 import LatLonTest._
 
 class LatLonTest extends UnitTest {
+
+  @Test
+  def basicTest {
+    val expected = List(radians(37.774930), radians(-122.419416))
+    assertEquals( expected, sanFrancisco.toList )
+  }
 
   @Test
   def isCertainDistanceFromAnotherLocation {

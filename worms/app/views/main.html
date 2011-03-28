@@ -7,10 +7,33 @@
         <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
         #{get 'moreStyles' /}
         <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
-        <script src="@{'/public/javascripts/jquery-1.4.2.min.js'}" type="text/javascript" charset="utf-8"></script>
-        #{get 'moreScripts' /}
-    </head>
+   </head>
     <body>
         #{doLayout /}
-    </body>
+        <h2>Privacy Notice</h2>
+
+        <p>This website only stores anonymous information, which we
+        match to you only via the randomly-generated ID <span
+        class="anonid">[your ID]</span> that we store on your
+        computer.  To remove all the data we have collected about
+        <span class="anonid">[your ID]</span> you can <button
+        type="button" onclick="WormsMain.removeAllData();">remove all
+        data about <span class="anonid"></span></button></p>
+
+        <p>If you wish to stop this web site from tracking you, you
+        can modify the cookie settings in your browser and, if the
+        browser supports Flash, modify your <a
+         href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager07.html">Flash
+        settings</a>.</p>
+
+        <p id="main_msg"></p>
+
+        <p><a href="@{Application.colophon}">Colophon</a></p>
+
+  </body>
+  <script src="@{'/public/javascripts/jquery-1.4.2.min.js'}" charset="utf-8"></script>
+  <script src="@{'/public/javascripts/jquery.cookie.js'}"></script>
+  <script src="@{'/public/javascripts/supercookie.js'}"></script>
+  <script src="@{'/public/javascripts/main.js'}"></script>
+  #{get 'moreScripts' /}
 </html>

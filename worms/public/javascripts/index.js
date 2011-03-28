@@ -1,11 +1,9 @@
 // -*- tab-width:4 -*-
-/*jslint browser: true */
+/*jslint browser: true, strict: true  */
+"use strict";
+var Modernizr, $, geoip_latitude, geoip_longitude, wormsMain;
 
-var Modernizr, $, geoip_latitude, geoip_longitude;
-
-
-
-$(function () {
+$(function () { //executed after DOM loaded
 
 	var count = 0, DEGREES_PER_RADIAN = 57.2957795;
 
@@ -19,7 +17,7 @@ $(function () {
 		$("#acc").html(acc);
 		$.post(
 			"/application/updateLocation",
-			{'lat': latRad, 'lon': lonRad, 'acc': acc},
+			{'lat': latRad, 'lon': lonRad, 'acc': acc, 'anonid': wormsMain.getAnonid()},
 			function (data) {
 				$('#msg').html(data);
 			}
