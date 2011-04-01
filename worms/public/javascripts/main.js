@@ -38,15 +38,20 @@ function WormsMain() {
 	//find anonid
 	//first try query parameter
 	anonid = urlParams[COOKIE_NAME];
-	if (anonid === undefined) {
+	if (anonid === undefined || anonid.length !== 16) {
 		$(function () {
 			//Then try Flash cookie
-			anonid = getSuperCookie(COOKIE_NAME);
-			if (anonid === null) {
+			try{
+				anonid = getSuperCookie(COOKIE_NAME);
+			}catch(err){
+				console.log(err)
+				anonid = null
+			}
+			if (anonid === null || anonid.length !== 16) {
 				//Then try regular cookie
 				anonid = $.cookie(COOKIE_NAME);
 				
-				if (anonid === null) {
+				if (anonid === null || anonid.length !== 16) {
 					//Create a new anonid
 					$.post(
 						"/application/createNewUser",
@@ -61,6 +66,7 @@ function WormsMain() {
 							$('#main_msg').html("Created new randomly generated ID " + anonid);
 							displayAnonid();
 						}
+						
 					);
 				}
 			}

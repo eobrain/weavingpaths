@@ -1,5 +1,5 @@
 
-import models.Anonid
+import models.Anon
 import play.test.UnitTest
 import org.junit.{ Assert, Test }
 import Assert.{ assertEquals, assertFalse }
@@ -8,11 +8,11 @@ class AnonidTest extends UnitTest {
 
   @Test
   def basicTest {
-    val a = Anonid.random
-    val b = Anonid.random
+    val a = Anon.createNew
+    val b = Anon.createNew
     assertFalse( a == b )
 
-    val aCopy = Anonid(a.toString)
+    val aCopy = Anon(a.toString)
     assertEquals( a, aCopy )
 
   }

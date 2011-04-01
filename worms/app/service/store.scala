@@ -18,7 +18,7 @@ object Store{
   val connection = MongoConnection(dbhost, 27017)
   Logger.info("Connecting to mongoDB on %s",connection)
   val db = connection(configuration getProperty "worms.dbhost")
-  val locations = db("locations")
-  locations ensureIndex MongoDBObject("loc" -> "2d")
+
+  //Allow spacial lookup and lookup by anonid
 
 }

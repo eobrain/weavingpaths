@@ -5,7 +5,7 @@
  * which is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-import models.Anonid
+import models.{ Anon, Event, LatLon }
 import service.store.Store
 import org.junit.{Before, Test, Assert}
 import play.Logger
@@ -18,14 +18,14 @@ import com.mongodb.casbah.Imports._
 import java.io.File
 import Assert.{assertEquals, assertTrue, fail}
 import scala.collection.mutable.HashSet
-import Math.random
+import math.random
 import ApplicationTest._
 
 class ApplicationTest extends FunctionalTest {
 
   @Before
   def removeAllOldStuffInDb {
-    Store.locations remove MongoDBObject()
+    Event.removeAllData()
   }
 
   @Test
@@ -42,21 +42,16 @@ class ApplicationTest extends FunctionalTest {
     val lonOrig = random - 0.5
     val accOrig = random * 100
 
-    updateLocation(latOrig, lonOrig, accOrig, Anonid("0123456789012345678901"))
+    updateLocation(latOrig, lonOrig, accOrig, Anon("0123456789012345678901"))
 
-    val query = MongoDBObject("loc" ->  
-			      MongoDBObject("$nearSphere" -> List(latOrig, lonOrig))
-			    ) 
-    Store.locations findOne query match {
+
+    Event.findOneNear(LatLon(latOrig,lonOrig)) match {
       case Some(result) =>
-	Logger.info("loc=%s",result)
-        var loc = result.as[BasicDBList]("loc")
-        var lat:Double = loc(0).asInstanceOf[Double]
-        var lon:Double = loc(1).asInstanceOf[Double]
-	assertEquals(latOrig, lat, EPSILON)
-	assertEquals(lonOrig, lon, EPSILON)
-	assertEquals(accOrig, result.as[Double]("acc"), EPSILON)
-        assertEquals(22, result.as[String]("anonid").length)
+	Logger.info("result=%s",result)
+	assertEquals(latOrig, result.loc.lat, EPSILON)
+	assertEquals(lonOrig, result.loc.lon, EPSILON)
+	assertEquals(accOrig, result.acc, EPSILON)
+        assertEquals(16, result.anon.toString.length)
       case None =>
 	fail
     }
@@ -87,7 +82,7 @@ class ApplicationTest extends FunctionalTest {
   def canRemoveAllDataAboutAUser {
     val createUserResponse = POST("/application/createNewUser")
     assertIsOk(createUserResponse)
-    val anonid = Anonid( getContent(createUserResponse) )
+    val anonid = Anon( getContent(createUserResponse) )
 
     updateLocation(random -0.5, random - 0.5, random * 100, anonid)
     updateLocation(random -0.5, random - 0.5, random * 100, anonid)
@@ -112,16 +107,15 @@ object ApplicationTest{
 
   val EPSILON = 0.001
 
-  def dataCount(anonid:Anonid) = 
-    Store.locations.find( MongoDBObject("anonid" -> anonid.toString) ).length
+  def dataCount(anon:Anon) = Event.findAll(anon).length
   
-  private def updateLocation(lat:Double, lon:Double, acc:Double, anonid:Anonid) {
+  private def updateLocation(lat:Double, lon:Double, acc:Double, anon:Anon) {
     val response = POST(
       "/application/updateLocation",
       Map("lat"    -> lat.toString,
 	  "lon"    -> lon.toString, 
 	  "acc"    -> acc.toString,
-	  "anonid" -> anonid.toString
+	  "anonid" -> anon.toString
 	).asJava,
       Map[String,File]().asJava
     )

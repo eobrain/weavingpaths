@@ -1,0 +1,44 @@
+/* -*- fill-column:40 -*- */
+digraph G {
+  label="Weavingpaths Data Model"
+  node[shape=record]
+
+  Event [label="Event\n«persistent»|latLon\nacc\ntime\nanon"]
+
+  LatLon [label="LatLon|lat\nlon"]
+
+  Anon [label="Anon\n«persistent»|"]
+
+  Connection [label="Nearby\n«persistent»|eventA\neventB"]  
+
+  SquishedEvents [label="SquishedEvents|center\nevents|line"]
+
+  Connection -> Event [label="2"]
+
+  Event -> Anon
+  Event -> LatLon
+
+  SquishedEvents -> LatLon
+  SquishedEvents -> Event [label="*"]
+
+  node [shape=note]
+
+  eventNote [label=
+  
+"The lat and lon fields are geographical\l\
+coordinates in radians.  The acc field\l\
+is the accuracy of the location in\l\
+meters.  Time is a long integer Unix\l\
+epoch time.\l"]
+
+  anonNote [label=
+
+"Anon is an anonymous representation of\l\
+a user.\l"]
+
+  edge  [style=dashed,arrowhead=none]
+   Event -> eventNote
+   Anon -> anonNote
+
+  rankdir=LR
+}

@@ -7,12 +7,11 @@
 
 package controllers
 
-import models.{ LatLon, Anonid }
+import models.{ LatLon, Anon, Event }
 import service.store.Store
-import play._
+import play.Logger
 import play.data.validation.{ Required, Validation }
-import play.mvc._
-import com.mongodb.casbah.Imports._
+import play.mvc.Controller
 import Logger.info
 
 object Application extends Controller {
@@ -34,26 +33,44 @@ object Application extends Controller {
 
     val latLon = LatLon(lat,lon)
     
-    val loc = MongoDBObject("loc" -> latLon.toList,
-			    "acc" -> acc,
-			    "time" -> System.currentTimeMillis,
-			    "anonid" -> Anonid(anonid).toString
-			  )
-    Store.locations += loc
+    Event(latLon, acc, System.currentTimeMillis, Anon(anonid)  )
     <p>OK</p>
+  }
+
+  /** AJAX GET /application/dataForDisplay?lat=...&lon=...  (lat and lon in radians)
+   * return JSON string:
+   * [
+   *   {anonid:..., track:[ [[lat,lon],acc,time], [[lat,lon],acc,time], [[lat,lon],acc,time], ...]}
+   *   {anonid:..., track:[ [[lat,lon],acc,time], [[lat,lon],acc,time], [[lat,lon],acc,time], ...]}
+   *   {anonid:..., track:[ [[lat,lon],acc,time], [[lat,lon],acc,time], [[lat,lon],acc,time], ...]}
+   *   ...
+   * ]
+   * where each lat and lon are in radians, acc is in meters, and time is a UNIX-epoch long integer
+   * */
+  def dataForDisplay(anonid:String) = {
+
+    //First find all locations for this user
+    val user = Anon(anonid)
+    val userEvents = Event.findAll(user)
+    
+    //Find all other users that are closest at some point to this user's events
+    for( event <- userEvents ){
+      Event.findAllNear(event.loc)
+      //...
+    }
   }
 
   /** AJAX POST /application/updateLocation
    * returns id as String
    */
-  def createNewUser() =  Anonid.random.toString
+  def createNewUser() =  Anon.createNew.toString
 
   /** AJAX POST /application/updateLocation
    *  anonid=...
    * returns status
    */
   def removeAllData(anonid:String) = {
-    Store.locations.remove( MongoDBObject("anonid" -> Anonid(anonid).toString) )
+    new Anon(anonid).removeAllData()
     <p>OK</p>
   }
 

@@ -2,7 +2,7 @@ import org.junit.{Test, Assert}
 import play.test.UnitTest
 import models.LatLon
 import LatLon.radians
-import Math.{ Pi, random }
+import math.{ Pi, random }
 import Assert.{ assertEquals, assertTrue }
 import LatLonTest._
 
